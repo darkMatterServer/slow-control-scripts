@@ -1,0 +1,9 @@
+Python is installed in a virtual enviorment 
+--see docs.python.org/3/library/venv.html
+
+When running python, first use cd Desktop, then cd dark_matter-server
+
+Then, source alpha-env/bin/activate
+
+(A useful resource for understanding why is above)
+
