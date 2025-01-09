@@ -10,16 +10,19 @@ from data_manager import dataManager
 #setting up InfluxDBClient
 
 '''
-This script records and pushes temperature recordings from LakeShore to a local database (Raspberry Pi) 
+This script records and pushes temperature recordings from LakeShore to a local database (Raspberry Pi)
 '''
 
-
-host = '137.165.72.242'
+#previous host aand port
+#host = '137.165.72.242'
+host = 137.165.111.177
 port = '8086'
 
-username = 'admin'
-password = 'password'
-db = 'darkmatter1'
+
+#username = admin password = password db = darkmatter1
+username = 'giovanetti'
+password = 'darkmatter'
+db = 'darkside_williams'
 
 #setting up 336 temp control
 my_336 = Model336()
@@ -36,39 +39,42 @@ manager = dataManager(client)
 # Sending data
 
 while True:
-    
+    print('while loop')
+
     try:
         #print("All Temp Readings on ABCD ")
         #print(my_336.get_all_kelvin_reading())
         #print("Heater Range: ")
         #print(my_336.get_heater_range(1))
-        #print("Temp of A: ") 
+        #print("Temp of A: ")
         #print(my_336.get_all_kelvin_reading()[0])
         #print("Setpoint of A")
         #print(my_336.get_control_setpoint(1))
 
         data_point_A = [
-            {"measurement": "336 Temperature Control", 
-            "tags": {"location": 'Williams College'}, 
-            "time": datetime.datetime.utcnow().isoformat(), 
+            {"measurement": "336 Temperature Control",
+            "tags": {"location": 'Williams College'},
+            "time": datetime.datetime.utcnow().isoformat(),
             "fields": {
                 "sensor_reading": my_336.get_all_kelvin_reading()[0],
                 "setpoint": my_336.get_control_setpoint(0),
                 "sensor number": "A"}}
             ]
         data_point_B = [
-            {"measurement": "336 Temperature Control", 
-            "tags": {"location": 'Williams College'}, 
-            "time": datetime.datetime.utcnow().isoformat(), 
+            {"measurement": "336 Temperature Control",
+            "tags": {"location": 'Williams College'},
+            "time": datetime.datetime.utcnow().isoformat(),
             "fields": {
                 "sensor_reading": my_336.get_all_kelvin_reading()[1],
                 "setpoint": my_336.get_control_setpoint(1),
                 "sensor number": "B"}}
             ]
-
+        print('sending payload 1')
         print(data_point_A)
         print(data_point_B)
 
+
+        print('sending payload 2')
         manager.send_payload(data_point_A)
         manager.send_payload(data_point_B)
         print("Payload Launched")
@@ -83,7 +89,7 @@ while True:
 points = manager.pull_data('30d')
 for point in points:
     print(f"Time: {point['time']}, Temperature:{point.get('sensor_reading')}, Setpoint: {point.get('setpoint')}, Sensor: {point.get('sensor number')}")
-    
+
 '''
-# Delete data 
+# Delete data
 #manager.delete_data('30d')
