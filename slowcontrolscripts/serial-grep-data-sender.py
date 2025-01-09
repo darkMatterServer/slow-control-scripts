@@ -14,8 +14,8 @@ host = '137.165.111.177'
 port = '8086'
 
 username='giovanetti'
-password='darkmatter'
-db='williams_darkside'
+password='wvTqYN41Jzw6i5652gHYZGKu4E_6BiVlSptgTvP0PqP1Y03z_YZk3Bpzvrsxu2cXTglXBWXNnxlNhuf2fcy4qA=='
+db='williams_dm_bucket'
 
 #setting up client
 
