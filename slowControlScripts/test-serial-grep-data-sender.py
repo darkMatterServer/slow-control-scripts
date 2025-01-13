@@ -41,7 +41,7 @@ def main(setpoint):
                 if ser.in_waiting > 0:
                     arduino_raw = str(ser.readline())[2:][:-5]
                     if len(data) == 0:
-                        if not arduino_raw.startswith("PID Output"):
+                        if not arduino_raw.startswith("PID V"):
                             continue
                     data += [arduino_raw]
                     print(len(data))
