@@ -2,7 +2,7 @@
 #include <SoftwareSerial.h> 
 #define DAC_ADDR 0x0C
 
-float setpoint_pressure = 0
+float setpoint_pressure = 0;
 
 // the value returned from the analog sensor
 float analogValue = 0; 
@@ -38,7 +38,7 @@ void loop() {
     // setpoint code
     analogValue = analogRead(A3); 
     float setpoint = analogValue*(0.0048);
-    float setpoint_pressure = setpoint * 5.0;
+    setpoint_pressure = setpoint * 5.0;
 
     if (Serial.available() > 0) {
       // Read the incoming data as a string
@@ -58,7 +58,7 @@ void loop() {
 
     // //setting up PID
     float delta = pressure - setpoint_pressure;
-    Serial.println('Delta: ')
+    Serial.println("Delta: ")
     Serial.println(delta);
 
     if(delta < 0.0){
@@ -97,3 +97,4 @@ void loop() {
     Serial.println("MFC Output Voltage: ");
     Serial.println(MFCoutput_voltage);
   }
+}
