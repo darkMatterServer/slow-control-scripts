@@ -38,6 +38,7 @@ def main(setpoint):
             data = []
             while len(data)<19:
                 #initiate serial read. note commnd, dmesg | grep tty used to find port
+                print("here")
                 if ser.in_waiting > 0:
                     arduino_raw = str(ser.readline())[2:][:-5]
                     if len(data) == 0:
