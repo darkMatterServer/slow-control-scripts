@@ -46,10 +46,6 @@ void loop() {
       setpoint_pressure = incomingData.toFloat();  // Convert the string to a float
     }
 
-    // Print the received setpoint to the Serial Monitor (for debugging)
-    Serial.print("Received Setpoint: ");
-    Serial.println(setpoint_pressure);
-
     delay(100);
 
     //read pressure on 10bit scale. 1:5 conversion scale
@@ -58,7 +54,6 @@ void loop() {
 
     // //setting up PID
     float delta = pressure - setpoint_pressure;
-    Serial.println("Delta: ");
     Serial.println(delta);
 
     if(delta < 0.0){
