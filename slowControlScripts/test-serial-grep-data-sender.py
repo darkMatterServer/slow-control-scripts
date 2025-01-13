@@ -30,7 +30,7 @@ def main(setpoint):
     #ser.write(str(setpoint).encode())  # Send the value as a string
     print(setpoint)
     
-    serial_grep = serial_grep()
+    serial_grep_inst = serial_grep()
     manager = dataManager(client)
 
     while True:
@@ -49,7 +49,7 @@ def main(setpoint):
 
 
 
-            raw_data = serial_grep.parse_arduino_data(data)
+            raw_data = serial_grep_inst.parse_arduino_data(data)
             print(raw_data)
 
 
@@ -57,7 +57,7 @@ def main(setpoint):
                 {"measurement": "Arduino",
                 "tags": {"location": 'Williams College'},
                 "time": datetime.datetime.utcnow().isoformat(),
-                "fields": serial_grep.parse_arduino_data(data)}
+                "fields": serial_grep_inst.parse_arduino_data(data)}
                 ]
             #print(data)
             print("data point was created")
@@ -84,6 +84,6 @@ if __name__ == "__main__":
         if args.setpoint is not None:
             main(args.setpoint)
         else:
-            print("Pressure setpoint is not provided.")
+            main(14.0)
     except KeyboardInterrupt:
         print("Keyboard Interrupt")
