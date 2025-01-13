@@ -58,7 +58,7 @@ void loop() {
 
     // //setting up PID
     float delta = pressure - setpoint_pressure;
-    Serial.println("Delta: ")
+    Serial.println("Delta: ");
     Serial.println(delta);
 
     if(delta < 0.0){
