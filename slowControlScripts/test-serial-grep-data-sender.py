@@ -44,11 +44,10 @@ def main(setpoint):
                         if not arduino_raw.startswith("PID V"):
                             continue
                     data += [arduino_raw]
-                    print(len(data))
                 #print(data)
 
 
-
+            print(data)
             raw_data = serial_grep_inst.parse_arduino_data(data)
             print(raw_data)
 
