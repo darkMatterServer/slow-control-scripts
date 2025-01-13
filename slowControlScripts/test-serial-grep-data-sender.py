@@ -45,7 +45,7 @@ def main(setpoint):
                         if not arduino_raw.startswith("PID Output"):
                             continue
                     data += [arduino_raw]
-                    print(arduino_raw)
+                    print(len(data))
                 #print(data)
 
 
