@@ -27,7 +27,7 @@ def main(setpoint):
     print(ser)
     print("Serial Connection Success")
 
-    #ser.write(str(setpoint).encode())  # Send the value as a string
+    ser.write(str(setpoint).encode())  # Send the value as a string
     print(setpoint)
     
     serial_grep_inst = serial_grep()
