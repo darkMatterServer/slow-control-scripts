@@ -27,7 +27,7 @@ def main(setpoint):
     print(ser)
     print("Serial Connection Success")
 
-    ser.write((str(setpoint) + '\n').encode('utf-8'))  # Send the value as a string
+    ser.write((str(setpoint)).encode('utf-8'))  # Send the value as a string
     print(setpoint)
     
     serial_grep_inst = serial_grep()
@@ -44,6 +44,7 @@ def main(setpoint):
                         if not arduino_raw.startswith("PID V"):
                             continue
                     data += [arduino_raw]
+                    print(len(data))
                 #print(data)
 
 
