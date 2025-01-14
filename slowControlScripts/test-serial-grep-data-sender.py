@@ -1,4 +1,3 @@
-﻿import argparse
 import time
 import serial
 import os, datetime
@@ -19,7 +18,9 @@ def main(setpoint):
     db='williams_dm_bucket'
 
     #setting up client
+
     client = InfluxDBClient(host, port, username, password, db)
+    #print(client)
     print("Client Setup Success")
 
     #setting up serial connection
@@ -27,11 +28,11 @@ def main(setpoint):
     print(ser)
     print("Serial Connection Success")
 
-    ser.write((str(setpoint)).encode('utf-8'))  # Send the value as a string
-    print(setpoint)
-    
-    serial_grep_inst = serial_grep()
+    serial_grep = serial_grep()
     manager = dataManager(client)
+
+    ser.write(str(setpoint))# Send the value as a string
+    print(setpoint)
 
     while True:
         try:
@@ -41,22 +42,23 @@ def main(setpoint):
                 if ser.in_waiting > 0:
                     arduino_raw = str(ser.readline())[2:][:-5]
                     if len(data) == 0:
-                        if not arduino_raw.startswith("PID V"):
+                        if not arduino_raw.startswith("PID Output"):
                             continue
                     data += [arduino_raw]
-                    print(len(data))
+                    #print(arduino_raw)
                 #print(data)
 
 
-            raw_data = serial_grep_inst.parse_arduino_data(data)
-            print(raw_data)
+
+            raw_data = serial_grep.parse_arduino_data(data)
+            print(serial_grep.parse_arduino_data(data))
 
 
             data_point = [
                 {"measurement": "Arduino",
                 "tags": {"location": 'Williams College'},
                 "time": datetime.datetime.utcnow().isoformat(),
-                "fields": serial_grep_inst.parse_arduino_data(data)}
+                "fields": serial_grep.parse_arduino_data(data)}
                 ]
             #print(data)
             print("data point was created")
@@ -68,9 +70,6 @@ def main(setpoint):
                 print(f"Error:  {e}")
                 time.sleep(5)
         time.sleep(.5)
-
-
-
 
 if __name__ == "__main__":
 
