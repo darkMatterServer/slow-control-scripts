@@ -40,14 +40,13 @@ def main(setpoint):
                 #initiate serial read. note commnd, dmesg | grep tty used to find port
                 if ser.in_waiting > 0:
                     arduino_raw = str(ser.readline())[2:][:-5]
-                    #if len(data) == 0:
-                        #if not arduino_raw.startswith("PID V"):
-                            #3continue
+                    if len(data) == 0:
+                        if not arduino_raw.startswith("PID V"):
+                            continue
                     data += [arduino_raw]
                 #print(data)
 
 
-            print(data)
             raw_data = serial_grep_inst.parse_arduino_data(data)
             print(raw_data)
 
