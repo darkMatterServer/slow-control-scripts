@@ -12,12 +12,10 @@ This script records a serial output from an Arduino to a local database (Raspber
 #Setting up InfluxDB <-> for specific database/
 def main(setpoint,serial_grep,manager,ser):
 
-    ser.write(str(setpoint).encode())# Send the value as a string
-    print(setpoint)
-
     while True:
         try:
             data = []
+            ser.write(str(setpoint).encode())# Send the value as a string
             while len(data)<19:
                 #initiate serial read. note commnd, dmesg | grep tty used to find port
                 if ser.in_waiting > 0:
