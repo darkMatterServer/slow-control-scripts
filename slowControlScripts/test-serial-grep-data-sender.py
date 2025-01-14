@@ -4,6 +4,7 @@ import os, datetime
 from influxdb import InfluxDBClient
 from data_manager import dataManager
 from serial_grep_driver import serial_grep
+import argparse
 
 '''
 This script records a serial output from an Arduino to a local database (Raspberry Pi)
