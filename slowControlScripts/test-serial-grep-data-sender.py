@@ -10,27 +10,7 @@ import argparse
 This script records a serial output from an Arduino to a local database (Raspberry Pi)
 '''
 #Setting up InfluxDB <-> for specific database/
-def main(setpoint):
-    host = '137.165.111.177'
-    port = '8086'
-
-    username='giovanetti'
-    password='wvTqYN41Jzw6i5652gHYZGKu4E_6BiVlSptgTvP0PqP1Y03z_YZk3Bpzvrsxu2cXTglXBWXNnxlNhuf2fcy4qA=='
-    db='williams_dm_bucket'
-
-    #setting up client
-
-    client = InfluxDBClient(host, port, username, password, db)
-    #print(client)
-    print("Client Setup Success")
-
-    #setting up serial connection
-    ser = serial.Serial('/dev/ttyACM0',baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
-    print(ser)
-    print("Serial Connection Success")
-
-    serial_grep = serial_grep()
-    manager = dataManager(client)
+def main(setpoint,serial_grep,manager,ser):
 
     ser.write(str(setpoint))# Send the value as a string
     print(setpoint)
@@ -73,7 +53,27 @@ def main(setpoint):
         time.sleep(.5)
 
 if __name__ == "__main__":
+    host = '137.165.111.177'
+    port = '8086'
 
+    username='giovanetti'
+    password='wvTqYN41Jzw6i5652gHYZGKu4E_6BiVlSptgTvP0PqP1Y03z_YZk3Bpzvrsxu2cXTglXBWXNnxlNhuf2fcy4qA=='
+    db='williams_dm_bucket'
+
+    #setting up client
+
+    client = InfluxDBClient(host, port, username, password, db)
+    #print(client)
+    print("Client Setup Success")
+
+    #setting up serial connection
+    ser = serial.Serial('/dev/ttyACM0',baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
+    print(ser)
+    print("Serial Connection Success")
+
+    serial_grep = serial_grep()
+    manager = dataManager(client)
+    
     parser = argparse.ArgumentParser(description="Data from Arduino")
     parser.add_argument("-p", "--pressure", type=float, dest="setpoint", help= "Pressure setpoint (psi)")
     args = parser.parse_args()
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     try:
         # Pass the setpoint (args.setpoint) to the main function
         if args.setpoint is not None:
-            main(args.setpoint)
+            main(args.setpoint,serial_grep,manager,ser)
         else:
             main(14.0)
     except KeyboardInterrupt:
