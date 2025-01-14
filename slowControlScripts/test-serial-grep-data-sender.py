@@ -12,7 +12,7 @@ This script records a serial output from an Arduino to a local database (Raspber
 #Setting up InfluxDB <-> for specific database/
 def main(setpoint,serial_grep,manager,ser):
 
-    ser.write(str(setpoint))# Send the value as a string
+    ser.write(str(setpoint).encode())# Send the value as a string
     print(setpoint)
 
     while True:
