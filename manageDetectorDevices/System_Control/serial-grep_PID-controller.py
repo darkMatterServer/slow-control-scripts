@@ -26,12 +26,12 @@ def send_to_influxdb(measurement, location, timestamp, pressure, setpoint_pressu
 
 #Setting up influxdb data <-> for specific database
 
-host = '137.165.96.253'
+host = '137.165.111.177'
 port = '8086'
 
-username='admin'
-password='password'
-db='darkmatter1'
+username='giovanetti'
+password='wvTqYN41Jzw6i5652gHYZGKu4E_6BiVlSptgTvP0PqP1Y03z_YZk3Bpzvrsxu2cXTglXBWXNnxlNhuf2fcy4qA=='
+db='williams_dm_bucket'
 
 #setting up client
 
