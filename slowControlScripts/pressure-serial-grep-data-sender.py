@@ -30,11 +30,7 @@ def parse_arduino_data(data):
 
     # Assuming the data contains only the pressure value as a string
     if len(data) > 0:
-        # If the incoming data is a byte string, decode it first (only if it's in byte format)
-        if isinstance(data[0], bytes):
-            raw_value = data[0].decode('utf-8').strip()  # Decode byte string and remove whitespace
-        else:
-            raw_value = data[0].strip()  # Already a string, just strip whitespace
+        raw_value = data[0].strip()  # Already a string, just strip whitespace
 
         try:
             # Attempt to convert the cleaned string to a float
