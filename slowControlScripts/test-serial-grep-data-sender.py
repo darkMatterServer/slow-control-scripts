@@ -81,6 +81,6 @@ if __name__ == "__main__":
         if args.setpoint is not None:
             main(args.setpoint,serial_grep,manager,ser)
         else:
-            main(14.0)
+            main(14.0,serial_grep,manager,ser)
     except KeyboardInterrupt:
         print("Keyboard Interrupt")
