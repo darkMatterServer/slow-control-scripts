@@ -94,9 +94,6 @@ if __name__ == "__main__":
     
     try:
         # Pass the setpoint (args.setpoint) to the main function
-        if args.setpoint is not None:
-            main(manager,ser)
-        else:
-            main(14.0)
+        main(manager,ser)
     except KeyboardInterrupt:
         print("Keyboard Interrupt")
