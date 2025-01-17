@@ -54,10 +54,9 @@ def main(manager, ser):
                 arduino_raw = ser.readline()  # Read byte string from Arduino
                 decoded_value = arduino_raw.decode('utf-8').strip()  # Decode byte string to string and remove newlines/extra spaces
                 data.append(decoded_value)
-                print(f"Decoded Arduino data: {data}")
 
             raw_data = parse_arduino_data(data)  # Parse the data
-            print(f"Parsed data: {raw_data}")
+            print(raw_data)
 
             # Prepare the data point to send to InfluxDB
             data_point = [
