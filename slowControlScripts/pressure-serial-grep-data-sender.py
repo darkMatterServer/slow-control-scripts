@@ -30,7 +30,7 @@ def parse_arduino_data(data):
 
     # Assuming the data contains only the pressure value as a string
     if len(data) > 0:
-        raw_value = data[0].strip()  # Already a string, just strip whitespace
+        raw_value = data[0].strip()  # Remove extra whitespace or newlines
 
         try:
             # Attempt to convert the cleaned string to a float
@@ -44,35 +44,42 @@ def parse_arduino_data(data):
 
 
 
-#Setting up InfluxDB <-> for specific database/
-def main(manager,ser):
 
+#Setting up InfluxDB <-> for specific database/
+def main(manager, ser):
     while True:
         try:
             data = []
             if ser.in_waiting > 0:
-                arduino_raw = str(ser.readline())
-                data += [arduino_raw]
-            print(data)
-            raw_data = parse_arduino_data(data)
-            print(parse_arduino_data(data))
+                arduino_raw = ser.readline()  # Read byte string from Arduino
+                decoded_value = arduino_raw.decode('utf-8').strip()  # Decode byte string to string and remove newlines/extra spaces
+                data.append(decoded_value)
+                print(f"Decoded Arduino data: {data}")
 
+            raw_data = parse_arduino_data(data)  # Parse the data
+            print(f"Parsed data: {raw_data}")
 
+            # Prepare the data point to send to InfluxDB
             data_point = [
-                {"measurement": "Arduino",
-                "tags": {"location": 'Williams College'},
-                "time": datetime.datetime.utcnow().isoformat(),
-                "fields": parse_arduino_data(data)}
-                ]
-            print("data point was created")
+                {
+                    "measurement": "Arduino",
+                    "tags": {"location": 'Williams College'},
+                    "time": datetime.datetime.utcnow().isoformat(),
+                    "fields": {"pressure": raw_data["Setra Pressure"]}
+                }
+            ]
+
+            print("Data point created")
             manager.send_payload(data_point)
             print("Data point sent!")
 
             time.sleep(0.5)
+
         except Exception as e:
-                print(f"Error:  {e}")
-                time.sleep(5)
-        time.sleep(.5)
+            print(f"Error: {e}")
+            time.sleep(5)
+        time.sleep(0.5)
+
 
 if __name__ == "__main__":
     host = '137.165.111.177'
