@@ -23,20 +23,28 @@ def send_serial_influxdb(measurement, location, timestamp, pressure):
     return payload
     
 def parse_arduino_data(data):
+    # Initialize an empty dictionary to hold parsed data
     parsed_data = {
-        "Setra Pressure": None 
+        "Setra Pressure": None  # We expect one value, "Setra Pressure"
     }
 
+    # Assuming the data contains only the pressure value as a string
     if len(data) > 0:
-        raw_value = data[0].decode('utf-8').strip()  
-        
+        # If the incoming data is a byte string, decode it first (only if it's in byte format)
+        if isinstance(data[0], bytes):
+            raw_value = data[0].decode('utf-8').strip()  # Decode byte string and remove whitespace
+        else:
+            raw_value = data[0].strip()  # Already a string, just strip whitespace
+
         try:
+            # Attempt to convert the cleaned string to a float
             parsed_data["Setra Pressure"] = float(raw_value)
         except ValueError:
             print(f"Error parsing pressure value: '{raw_value}' is not a valid float.")
             parsed_data["Setra Pressure"] = None  # Set to None if parsing fails
 
     return parsed_data
+
 
 
 
