@@ -49,7 +49,7 @@ def main(manager,ser):
             if ser.in_waiting > 0:
                 arduino_raw = str(ser.readline())
                 data += [arduino_raw]
-
+            print(data)
             raw_data = parse_arduino_data(data)
             print(parse_arduino_data(data))
 
