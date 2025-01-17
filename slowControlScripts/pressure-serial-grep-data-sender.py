@@ -51,17 +51,15 @@ def main(manager, ser):
                 arduino_raw = ser.readline()  # Read byte string from Arduino
                 decoded_value = arduino_raw.decode('utf-8').strip()  # Decode byte string to string and remove newlines/extra spaces
                 data.append(decoded_value)
-                print(f"Decoded Arduino data: {data}")
 
             raw_data = parse_arduino_data(data)  # Parse the data
-            print(f"Parsed data: {raw_data}")
+            print(raw_data)
 
             # Extract the pressure value from the parsed data
             pressure = raw_data.get("Setra Pressure")
             if pressure is None:
-                print("Pressure value is None, skipping data point.")
                 time.sleep(0.5)
-                continue  # Skip this iteration if pressure is None
+                continue 
 
             # Prepare the data point to send to InfluxDB
             data_point = [
