@@ -25,7 +25,7 @@ def send_serial_influxdb(measurement, location, timestamp, mfc_flow_rate):
 
 async def get_alicat_data():
     # Replace with your serial port
-    async with FlowController(address='/dev/ttyUSB1') as flow_controlle
+    async with FlowController(address='/dev/ttyUSB1') as flow_controller:
         state = await flow_controller.get()
         print(state)
         mass_flow = state.get('mass_flow', 'N/A')
