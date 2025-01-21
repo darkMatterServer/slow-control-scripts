@@ -24,7 +24,7 @@ def send_serial_influxdb(measurement, location, timestamp, mfc_flow_rate):
 # Function to read Alicat MFC data (flow rate)
 def read_alicat_data(ser_mfc):
     # Send the command to get the flow rate
-    print(ser_mfc.write(b'!01\r\n'))
+    print(ser_mfc.write(b'!00\r\n'))
     ser_mfc.write(b'!01\r\n')
     response = ser_mfc.readline().decode('utf-8').strip()
     
