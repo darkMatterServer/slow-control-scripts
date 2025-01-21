@@ -53,14 +53,15 @@ def main(manager, ser_mfc):
                     "time": datetime.datetime.utcnow().isoformat(),
                     "fields": {
                         "mfc_flow_rate": mass_flow,
-                        "mfc_setpoint": setpoint,
-                        "mfc_temperature": temperature,
-                        "mfc_pressure": pressure
+                        "setpoint": setpoint,
+                        "temperature": temperature,
+                        "pressure": pressure
                         
                     }
                 }
             ]
-            print("Data point created:", data_point)
+            print("Data point created")
+            print(data_point[0].get('fields'))
             
             # Send data to InfluxDB
             manager.send_payload(data_point)
