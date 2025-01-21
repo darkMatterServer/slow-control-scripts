@@ -23,16 +23,21 @@ def send_serial_influxdb(measurement, location, timestamp, mfc_flow_rate):
 
 # Function to read Alicat MFC data (flow rate)
 def read_alicat_data(ser_mfc):
-    # Send the command to get the flow rate 
-    ser_mfc.write(b'!01\r\n') 
+    # Send the command to get the flow rate
+    ser_mfc.write(b'!01\r\n')
     response = ser_mfc.readline().decode('utf-8').strip()
     
+    print(f"Raw Response: '{response}'")  # Debugging line to check the raw response
+
     if response:
         try:
             return float(response)  
         except ValueError:
-            return 0.0  
+            print("ValueError: Could not convert response to float")
+            return 0.0
+    print("No response received.")
     return 0.0
+
 
 # Setting up InfluxDB <-> for specific database
 def main(manager, ser_mfc):
