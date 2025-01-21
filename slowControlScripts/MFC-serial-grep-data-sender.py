@@ -36,7 +36,7 @@ def read_alicat_data(ser_mfc):
 
 # Setting up InfluxDB <-> for specific database
 def main(manager, ser_mfc):
-
+    print("here")
     while True:
         try:
             # Get MFC flow rate data
