@@ -4,8 +4,8 @@ import os, datetime
 from influxdb import InfluxDBClient
 from data_manager import dataManager
 import argparse
-import time
-from alicat import Alicat
+import asyncio
+from alicat import FlowController
 
 # Function to send MFC data to server (InfluxDB)
 def send_serial_influxdb(measurement, location, timestamp, mfc_flow_rate):
@@ -41,38 +41,26 @@ def read_alicat_data(ser_mfc):
     print("No response received.")
     return 0.0
 
-def get_alicat_data():
-    # Initialize the Alicat device
-    try:
-        # Replace '/dev/ttyUSB1' with the correct serial port where your Alicat device is connected
-        mfc = Alicat('/dev/ttyUSB1')
-
-        # Query the device for various parameters
-        control_point = mfc.get_control_point()
-        gas = mfc.get_gas()
-        mass_flow = mfc.get_mass_flow()
-        pressure = mfc.get_pressure()
-        temperature = mfc.get_temperature()
-        volumetric_flow = mfc.get_volumetric_flow()
-        setpoint = mfc.get_setpoint()
-
-        # Print the retrieved data
-        print(f"Control Point: {control_point}")
-        print(f"Gas: {gas}")
+async def get_alicat_data():
+    # Replace with your serial port
+    async with FlowController(address='/dev/ttyUSB1') as flow_controller:
+        # Retrieve the state
+        state = await flow_controller.get()
+        
+        # Print the state or extract individual fields
+        print(state)
+        # Example: Extract and print specific values
+        mass_flow = state.get('mass_flow', 'N/A')
+        pressure = state.get('pressure', 'N/A')
         print(f"Mass Flow: {mass_flow} kg/s")
         print(f"Pressure: {pressure} psi")
-        print(f"Temperature: {temperature} °C")
-        print(f"Volumetric Flow: {volumetric_flow} L/min")
-        print(f"Setpoint: {setpoint} L/min")
 
-    except Exception as e:
-        print(f"Error: {e}")
-
-# Example usage: Continuously retrieve and print data every 1 second
-while True:
-    get_alicat_data()
-    time.sleep(1)  # Adjust the sleep time as needed
-
+        # Optionally stream or process data
+        # If you want to continuously fetch data, use an async loop
+        while True:
+            state = await flow_controller.get()
+            print(state)
+            await asyncio.sleep(1)  # Sleep between updates
 
 
 # Setting up InfluxDB <-> for specific database
@@ -128,7 +116,7 @@ if __name__ == "__main__":
     print(ser_mfc)
     print("Alicat MFC Serial Connection Success")
 
-    get_alicat_data()
+    asyncio.run(get_alicat_data())
     manager = dataManager(client)
 
     parser = argparse.ArgumentParser(description="MFC Data from Alicat")
