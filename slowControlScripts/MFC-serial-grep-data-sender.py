@@ -23,44 +23,14 @@ def send_serial_influxdb(measurement, location, timestamp, mfc_flow_rate):
     ]
     return payload
 
-# Function to read Alicat MFC data (flow rate)
-def read_alicat_data(ser_mfc):
-    # Send the command to get the flow rate
-    print(ser_mfc.write(b'!?\r\n'))
-    ser_mfc.write(b'!00\r\n')
-    response = ser_mfc.readline().decode('utf-8').strip()
-    
-    print(f"Raw Response: '{response}'")  # Debugging line to check the raw response
-
-    if response:
-        try:
-            return float(response)  
-        except ValueError:
-            print("ValueError: Could not convert response to float")
-            return 0.0
-    print("No response received.")
-    return 0.0
-
 async def get_alicat_data():
     # Replace with your serial port
-    async with FlowController(address='/dev/ttyUSB1') as flow_controller:
-        # Retrieve the state
+    async with FlowController(address='/dev/ttyUSB1') as flow_controlle
         state = await flow_controller.get()
-        
-        # Print the state or extract individual fields
         print(state)
-        # Example: Extract and print specific values
         mass_flow = state.get('mass_flow', 'N/A')
         pressure = state.get('pressure', 'N/A')
-        print(f"Mass Flow: {mass_flow} kg/s")
-        print(f"Pressure: {pressure} psi")
-
-        # Optionally stream or process data
-        # If you want to continuously fetch data, use an async loop
-        while True:
-            state = await flow_controller.get()
-            print(state)
-            await asyncio.sleep(1)  # Sleep between updates
+        return state
 
 
 # Setting up InfluxDB <-> for specific database
@@ -69,9 +39,11 @@ def main(manager, ser_mfc):
     while True:
         try:
             # Get MFC flow rate data
-            mfc_flow_rate = read_alicat_data(ser_mfc)
-            print(read_alicat_data(ser_mfc))
-            print(f"Alicat MFC Flow Rate: {mfc_flow_rate}")
+            state = asyncio.run(get_alicat_data())
+            mass_flow = state.get('mass_flow', 'N/A')
+            pressure = state.get('pressure', 'N/A')
+            temperature = state.get('temperature', 'N/A')
+            setpoint = state.get('setpoint', 'N/A')
 
             # Prepare the data point for InfluxDB
             data_point = [
@@ -80,7 +52,11 @@ def main(manager, ser_mfc):
                     "tags": {"location": 'Williams College'},
                     "time": datetime.datetime.utcnow().isoformat(),
                     "fields": {
-                        "mfc_flow_rate": mfc_flow_rate
+                        "mfc_flow_rate": mass_flow,
+                        "mfc_setpoint": setpoint,
+                        "mfc_temperature": temperature,
+                        "mfc_pressure": pressure
+                        
                     }
                 }
             ]
@@ -116,7 +92,6 @@ if __name__ == "__main__":
     print(ser_mfc)
     print("Alicat MFC Serial Connection Success")
 
-    asyncio.run(get_alicat_data())
     manager = dataManager(client)
 
     parser = argparse.ArgumentParser(description="MFC Data from Alicat")
