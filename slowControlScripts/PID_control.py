@@ -12,6 +12,7 @@ def get_influxdb_data(client):
     # Query for the latest pressure data from Arduino
     pressure_query = 'SELECT "pressure" FROM "Arduino_Data" ORDER BY time DESC LIMIT 1'
     pressure_result = client.query(pressure_query)
+    print(pressure_result)
     
     # Query for the latest MFC flow rate data
     flow_rate_query = 'SELECT "mfc_flow_rate" FROM "MFC_Data" ORDER BY time DESC LIMIT 1'
@@ -22,6 +23,7 @@ def get_influxdb_data(client):
     
     if pressure_result:
         pressure_points = list(pressure_result.get_points())
+        print(pressure_points)
         if pressure_points:
             pressure = pressure_points[0].get('pressure')
     
