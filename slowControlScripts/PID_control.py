@@ -10,7 +10,7 @@ from simple_pid import PID
 # Function to retrieve the latest pressure and MFC flow rate from InfluxDB
 def get_influxdb_data(client):
     # Query for the latest pressure data from Arduino
-    pressure_query = 'SELECT "pressure" FROM "Arduino_Data" ORDER BY time DESC LIMIT 1'
+    pressure_query = 'SELECT "pressure" FROM "Arduino"'
     pressure_result = client.query(pressure_query)
     print(pressure_result)
     
