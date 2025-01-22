@@ -70,7 +70,7 @@ def send_pid_to_influxdb(manager, setpoint, pressure, mfc_flow_rate, pid_output)
             "tags": {"location": 'Williams College'},
             "time": datetime.datetime.utcnow().isoformat(),
             "fields": {
-                "setpoint": setpoint,
+                "setpoint_pressure": setpoint,
                 "pressure": pressure,
                 "mfc_flow_rate": mfc_flow_rate,
                 "pid_output": pid_output
