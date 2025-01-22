@@ -47,12 +47,9 @@ def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
     
     if pressure is not None and mfc_flow_rate is not None:
         desired_flow_rate = pid(pressure) 
-        print(type(desired_flow_rate))
-        fr = float(desired_flow_rate)
-        set_flow_rate_to_mfc(fr)
-        
         # Print values for monitoring
         print(f"Current Pressure: {pressure} | Current Flow Rate: {mfc_flow_rate} | Desired Flow Rate: {desired_flow_rate}")
+        return desired_flow_rate
     else:
         print("Error: Could not retrieve valid data from InfluxDB.")
 
