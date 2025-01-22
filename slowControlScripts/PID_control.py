@@ -86,6 +86,7 @@ def main(manager, client, setpoint):
     while True:
         try:
             pressure, mfc_flow_rate = get_influxdb_data(client)
+            print(pressure, mfc_flow_rate)
             if pressure is not None and mfc_flow_rate is not None:
                 print(f"Pressure: {pressure}, MFC Flow Rate: {mfc_flow_rate}")
                 
@@ -134,6 +135,5 @@ if __name__ == "__main__":
             main(manager, client, args.setpoint)
         else:
             main(manager, client, 14.0)
-
     except KeyboardInterrupt:
         print("Keyboard Interrupt")
