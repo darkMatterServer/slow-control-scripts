@@ -95,7 +95,7 @@ def main(manager, client, setpoint):
                 print(f"PID Output: {pid_output}")
 
                 # Send the updated MFC setpoint (in terms of voltage) to the MFC (via DAC)
-                send_mfc_setpoint(pid_output)
+                set_flow_rate_to_mfc(pid_output)
 
                 # Optionally, send the PID data back to InfluxDB for logging
                 send_pid_to_influxdb(manager, setpoint, pressure, mfc_flow_rate, pid_output)
