@@ -73,10 +73,10 @@ async def set_flow_rate_to_mfc(desired_flow_rate):
 def run_commands():
     try:
         # Run the first command and suppress output
-        subprocess.Popen((['python3', 'MFC-serial-grep-data-sender.py'],stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(['python3', 'MFC-serial-grep-data-sender.py'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         # Run the second command and suppress output
-        subprocess.Popen((['python3', 'pressure-serial-grep-data-sender.py'],stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.Popen(['python3', 'pressure-serial-grep-data-sender.py'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         print("MFC and pressure scripts have been executed.")
     
