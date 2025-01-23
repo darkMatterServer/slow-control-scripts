@@ -53,17 +53,6 @@ def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
     else:
         print("Error: Could not retrieve valid data from InfluxDB.")
 
-# Function to simulate setting the flow rate (replace this with actual MFC control)
-'''
-def set_flow_rate_to_mfc(desired_flow_rate):
-    command = f"alicat --set-flow-rate {desired_flow_rate} /dev/ttyUSB1"
-    try:
-        subprocess.run(command, check=True, shell=True)
-        print(f"Flow rate set to {desired_flow_rate} using Alicat MFC.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to set flow rate: {e}")
-'''
-
 def set_flow_rate_to_mfc(desired_flow_rate):
     command = f"alicat --set-flow-rate {desired_flow_rate} /dev/ttyUSB1"
     try:
@@ -81,6 +70,19 @@ async def set_flow_rate_to_mfc(desired_flow_rate):
         except Exception as e:
             print(f"Failed to set flow rate: {e}")
 '''
+def run_commands():
+    try:
+        # Run the first command and suppress output
+        subprocess.run(['python3', 'MFC-serial-grep-data-sender.py'], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        # Run the second command and suppress output
+        subprocess.run(['python3', 'pressure-serial-grep-data-sender.py'], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        print("MFC and pressure scripts have been executed.")
+    
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred while executing one of the scripts: {e}")
+        
 # Function to send PID data to InfluxDB
 def send_pid_to_influxdb(manager, setpoint, pressure, mfc_flow_rate, pid_output):
     data_point = [
@@ -101,16 +103,16 @@ def send_pid_to_influxdb(manager, setpoint, pressure, mfc_flow_rate, pid_output)
 
 # Main function
 def main(manager, client, setpoint):
+    run_commands()
     while True:
         try:
             pressure, mfc_flow_rate = get_influxdb_data(client)
-            print(pressure, mfc_flow_rate)
             if pressure is not None and mfc_flow_rate is not None:
-                print(f"Pressure: {pressure}, MFC Flow Rate: {mfc_flow_rate}")
+                #print(f"Pressure: {pressure}, MFC Flow Rate: {mfc_flow_rate}")
                 
                 # Perform PID calculation
                 pid_output = pid_control(setpoint, pressure, mfc_flow_rate)
-                print(f"PID Output: {pid_output}")
+                #print(f"PID Output: {pid_output}")
 
                 # Send the updated MFC setpoint (in terms of voltage) to the MFC (via DAC)
                 set_flow_rate_to_mfc(pid_output)
