@@ -9,11 +9,9 @@ import subprocess
 
 # Function to retrieve the latest pressure and MFC flow rate from InfluxDB
 def get_influxdb_data(client):
-    # Query for the latest pressure data from Arduino
     pressure_query = 'SELECT "pressure" FROM "Arduino" ORDER BY time DESC LIMIT 1'
     pressure_result = client.query(pressure_query)
     
-    # Query for the latest MFC flow rate data
     flow_rate_query = 'SELECT "mfc_flow_rate" FROM "MFC_Data" ORDER BY time DESC LIMIT 1'
     flow_rate_result = client.query(flow_rate_query)
     
@@ -30,14 +28,11 @@ def get_influxdb_data(client):
         if flow_rate_points:
             mfc_flow_rate = flow_rate_points[0].get('mfc_flow_rate')
     
-    # Return the results if valid data is found
     if pressure is not None and mfc_flow_rate is not None:
         return pressure, mfc_flow_rate
     
     return None, None
 
-
-# Function to control flow rate based on PID output
 def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
     Kp = 1.0  # Proportional constant
     Ki = 0.1  # Integral constant
@@ -56,7 +51,6 @@ def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
 def set_flow_rate_to_mfc(desired_flow_rate):
     command = f"alicat --set-flow-rate {desired_flow_rate} /dev/ttyUSB1"
     try:
-        # Redirect both stdout and stderr to subprocess.DEVNULL to suppress output
         subprocess.run(command, check=True, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         print(f"Flow rate set to {desired_flow_rate} using Alicat MFC.")
     except subprocess.CalledProcessError as e:
@@ -101,7 +95,6 @@ def send_pid_to_influxdb(manager, setpoint, pressure, mfc_flow_rate, pid_output)
     manager.send_payload(data_point)
     print("PID Data sent to InfluxDB")
 
-# Main function
 def main(manager, client, setpoint):
     run_commands()
     while True:
@@ -112,14 +105,8 @@ def main(manager, client, setpoint):
                 
                 # Perform PID calculation
                 pid_output = pid_control(setpoint, pressure, mfc_flow_rate)
-                #print(f"PID Output: {pid_output}")
-
-                # Send the updated MFC setpoint (in terms of voltage) to the MFC (via DAC)
                 set_flow_rate_to_mfc(pid_output)
-
-                # Optionally, send the PID data back to InfluxDB for logging
                 send_pid_to_influxdb(manager, setpoint, pressure, mfc_flow_rate, pid_output)
-
             else:
                 print("No valid data from InfluxDB")
 
@@ -146,14 +133,10 @@ if __name__ == "__main__":
 
     # Parse command line arguments (setpoint)
     parser = argparse.ArgumentParser(description="PID Control for MFC")
-    parser.add_argument("-p", "--pressure", type=float, dest="setpoint", help="Pressure setpoint (psi)", required=True)
+    parser.add_argument("-p", "--pressure", type=float, dest="setpoint", help="Pressure setpoint (psi)", default=13.0)
     args = parser.parse_args()
 
-    # Start the main function with the provided setpoint
     try:
-        if args.setpoint is not None:
-            main(manager, client, args.setpoint)
-        else:
-            main(manager, client, 14.0)
+        main(manager, client, args.setpoint)
     except KeyboardInterrupt:
         print("Keyboard Interrupt")
