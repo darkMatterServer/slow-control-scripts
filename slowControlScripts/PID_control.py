@@ -49,7 +49,7 @@ def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
         print("Error: Could not retrieve valid data from InfluxDB.")
 
 def set_flow_rate_to_mfc(desired_flow_rate):
-    command = f"alicat --set-flow-rate {desired_flow_rate} /dev/ttyUSB1"
+    command = f"alicat --set-flow-rate {desired_flow_rate} /dev/ttyUSB0"
     try:
         subprocess.run(command, check=True, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         print(f"Flow rate set to {desired_flow_rate} using Alicat MFC.")
