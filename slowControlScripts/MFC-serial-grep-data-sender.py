@@ -24,7 +24,7 @@ def send_serial_influxdb(measurement, location, timestamp, mfc_flow_rate):
     return payload
 
 async def get_alicat_data():
-    async with FlowController(address='/dev/ttyUSB1') as flow_controller:
+    async with FlowController(address='/dev/ttyUSB0') as flow_controller:
         state = await flow_controller.get()
         print(state)
         mass_flow = state.get('mass_flow', 'N/A')
