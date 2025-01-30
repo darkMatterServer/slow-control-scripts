@@ -88,7 +88,7 @@ if __name__ == "__main__":
     print("Client Setup Success")
 
     # Setting up serial connection for Alicat MFC
-    ser_mfc = serial.Serial('/dev/ttyUSB1', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
+    ser_mfc = serial.Serial('/dev/ttyUSB0', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
     print(ser_mfc)
     print("Alicat MFC Serial Connection Success")
 
