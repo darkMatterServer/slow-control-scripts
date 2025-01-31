@@ -35,7 +35,7 @@ def get_influxdb_data(client):
 
 def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
     Kp = 15.0  # Proportional constant
-    Ki = 0.5  # Integral constant
+    Ki = 5.0 # Integral constant
     Kd = 0.01  # Derivative constant
     pid = PID(Kp=Kp, Ki=Ki, Kd=Kd)
     pid.setpoint = setpoint_pressure
