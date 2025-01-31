@@ -44,6 +44,11 @@ def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
         desired_flow_rate = -(pid(pressure)) 
         # Print values for monitoring
         print(f"Current Pressure: {pressure} | Desired Pressure: {setpoint_pressure} | Current Flow Rate: {mfc_flow_rate} | Desired Flow Rate: {desired_flow_rate}")
+
+        # ENSURING FLOW-RATE DOES NOT BECOME A NEGATIVE
+        if (desired_flow_rate < 0):
+            desired_flow_rate = 0;
+        
         return desired_flow_rate
     else:
         print("Error: Could not retrieve valid data from InfluxDB.")
