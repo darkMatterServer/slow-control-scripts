@@ -46,8 +46,8 @@ def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
         print(f"Current Pressure: {pressure} | Desired Pressure: {setpoint_pressure} | Current Flow Rate: {mfc_flow_rate} | Desired Flow Rate: {desired_flow_rate}")
 
         # ENSURING FLOW-RATE DOES NOT BECOME A NEGATIVE
-        if (desired_flow_rate < 0):
-            desired_flow_rate = 0;
+        if (desired_flow_rate < 0.0):
+            desired_flow_rate = 0.0;
         
         return desired_flow_rate
     else:
