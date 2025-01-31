@@ -41,7 +41,7 @@ def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
     pid.setpoint = setpoint_pressure
     
     if pressure is not None and mfc_flow_rate is not None:
-        desired_flow_rate = pid(pressure) 
+        desired_flow_rate = -(pid(pressure)) 
         # Print values for monitoring
         print(f"Current Pressure: {pressure} | Desired Pressure: {setpoint_pressure} | Current Flow Rate: {mfc_flow_rate} | Desired Flow Rate: {desired_flow_rate}")
         return desired_flow_rate
