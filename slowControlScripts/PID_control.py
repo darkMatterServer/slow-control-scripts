@@ -121,7 +121,7 @@ def main(manager, client, setpoint):
                 set_flow_rate_to_mfc(pid_output)
                 send_pid_to_influxdb(manager, setpoint, pressure, mfc_flow_rate, pid_output)
             else:
-                print("No valid data from InfluxDB")
+                print("No valid data from InfluxDB.")
 
             time.sleep(0.1)
 
