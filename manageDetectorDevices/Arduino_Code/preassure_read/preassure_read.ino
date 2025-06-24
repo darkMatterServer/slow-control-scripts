@@ -18,6 +18,7 @@ void loop() {
   // ADC II is for reading Setra preassure of MFC Nitrogen
   pressure = (readADCIIVoltage()*5.00);
   Serial.println(pressure);
+  delay(500);
 }
 
 

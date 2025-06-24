@@ -36,30 +36,37 @@ def get_influxdb_data(client):
 def pid_control(setpoint_pressure, pressure, mfc_flow_rate):
     Kp = 15.0  # Proportional constant
     Ki = 5.0 # Integral constant
-    Kd = 0.01  # Derivative constant
+    Kd = 0.5  # Derivative constant
     pid = PID(Kp=Kp, Ki=Ki, Kd=Kd)
     pid.setpoint = setpoint_pressure
     
     if pressure is not None and mfc_flow_rate is not None:
         desired_flow_rate = -(pid(pressure)) 
-        # Print values for monitoring
-        print(f"Current Pressure: {pressure} | Desired Pressure: {setpoint_pressure} | Current Flow Rate: {mfc_flow_rate} | Desired Flow Rate: {desired_flow_rate}")
 
         # ENSURING FLOW-RATE DOES NOT BECOME A NEGATIVE
         if (desired_flow_rate < 0.0):
-            desired_flow_rate = 0.0;
+            desired_flow_rate = 0.0
+        
+        elif desired_flow_rate > 40:
+            desired_flow_rate = 40.0
+            
+            
+        # Print values for monitoring
+        print(f"Current Pressure: {pressure} | Desired Pressure: {setpoint_pressure} | Current Flow Rate: {mfc_flow_rate} | Desired Flow Rate: {desired_flow_rate}")
+        
         
         return desired_flow_rate
     else:
         print("Error: Could not retrieve valid data from InfluxDB.")
 
 def set_flow_rate_to_mfc(desired_flow_rate):
-    command = f"alicat --set-flow-rate {desired_flow_rate} /dev/ttyUSB0"
+    command = f"alicat --set-flow-rate {desired_flow_rate} /dev/ttyUSB2"
     try:
         subprocess.run(command, check=True, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        print(f"Flow rate set to {desired_flow_rate} using Alicat MFC.")
+        print(f"Flow rate set to {desired_flow_rate} using Alicat MFC.")                
     except subprocess.CalledProcessError as e:
         print(f"Failed to set flow rate: {e}")
+        
 '''
 async def set_flow_rate_to_mfc(desired_flow_rate):
     async with FlowController(address='/dev/ttyUSB1') as flow_controller:
@@ -69,6 +76,7 @@ async def set_flow_rate_to_mfc(desired_flow_rate):
         except Exception as e:
             print(f"Failed to set flow rate: {e}")
 '''
+
 def run_commands():
     try:
         # Run the first command and suppress output
@@ -115,14 +123,15 @@ def main(manager, client, setpoint):
             else:
                 print("No valid data from InfluxDB")
 
-            time.sleep(1)
+            time.sleep(0.1)
 
         except Exception as e:
             print(f"Error: {e}")
-            time.sleep(5)
+            time.sleep(0.1)
+            
 
 if __name__ == "__main__":
-    host = '137.165.111.177'
+    host = '137.165.109.165'
     port = '8086'
 
     username = 'giovanetti'

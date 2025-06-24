@@ -24,7 +24,7 @@ def send_serial_influxdb(measurement, location, timestamp, mfc_flow_rate):
     return payload
 
 async def get_alicat_data():
-    async with FlowController(address='/dev/ttyUSB0') as flow_controller:
+    async with FlowController(address='/dev/ttyUSB2') as flow_controller:
         state = await flow_controller.get()
         print(state)
         mass_flow = state.get('mass_flow', 'N/A')
@@ -71,12 +71,11 @@ def main(manager, ser_mfc):
 
         except Exception as e:
             print(f"Error: {e}")
-            time.sleep(5)
+            time.sleep(1)
         
-        time.sleep(0.5)
 
 if __name__ == "__main__":
-    host = '137.165.111.177'
+    host = '137.165.109.165'
     port = '8086'
 
     username = 'giovanetti'
@@ -88,7 +87,7 @@ if __name__ == "__main__":
     print("Client Setup Success")
 
     # Setting up serial connection for Alicat MFC
-    ser_mfc = serial.Serial('/dev/ttyUSB0', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
+    ser_mfc = serial.Serial('/dev/ttyUSB2', baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE)
     print(ser_mfc)
     print("Alicat MFC Serial Connection Success")
 

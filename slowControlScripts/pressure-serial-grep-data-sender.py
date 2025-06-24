@@ -79,12 +79,11 @@ def main(manager, ser):
 
         except Exception as e:
             print(f"Error: {e}")
-            time.sleep(5)
-        time.sleep(0.5)
+            time.sleep(1)
 
 
 if __name__ == "__main__":
-    host = '137.165.111.177'
+    host = '137.165.109.165'
     port = '8086'
 
     username='giovanetti'

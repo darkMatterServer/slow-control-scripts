@@ -14,7 +14,7 @@ This script records and pushes temperature recordings from LakeShore to a local 
 '''
 
 
-host = "137.165.111.177"
+host = "137.165.109.165"
 port = '8086'
 
 username = 'giovanetti'
