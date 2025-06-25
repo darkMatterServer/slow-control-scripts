@@ -10,7 +10,8 @@ There are two main folders in this repository:
  - slowControlScripts
 
 Inside the manageDetectorDevices there is a folder Arduino_Code which contains various arduino programs that one should be able to access and modify outside the lab. The current arduino code being used by the pressure sensor is pressure_read.ino
-System_Control contains scripts to interact with various lab instruments, which will work in conjunction with slowcontrol. The PID, pressure, temperature, and MFC script are inside this folder. 
+
+slowControlScripts contains scripts to interact with various lab instruments, which will work in conjunction with slowcontrol. The PID, pressure, temperature, and MFC scripts are inside this folder. 
 
 
 To execute a python file run python3 xxx (where xxx) is the filename
