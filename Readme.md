@@ -2,7 +2,7 @@
 
 ![Spiraling Galaxy](bamboo-forest.jpg)
 
-The following repository contains scripts to interface with PID controllers and Arduinos, and Raspberry Pis. 
+The following repository contains scripts to interface with PID controllers and Arduinos, and Mass Flow Control. 
 
 There are three folders in this repository: 
 
