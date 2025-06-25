@@ -1,6 +1,6 @@
 ##  *Williams Dark Matter* Giovanetti Lab Scripts and Things
 
-![Spiraling Galaxy](bamboo-forest.jpg)
+![Spiraling Galaxy](Schematic-of-the-DarkSide-20k-detector.png)
 
 The following repository contains scripts to interface with PID controllers and Arduino
 
